@@ -1,0 +1,64 @@
+/**
+ * 
+ */
+package gui;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import data.DataCell;
+
+/**
+ * @author kamil
+ *
+ */
+public class DataCellPanel extends JPanel {
+
+	JLabel label;
+	JLabel value;
+	String id;
+	
+	/**
+	 * 
+	 */
+	public DataCellPanel(DataCell src) {
+
+		label = new JLabel(src.getLabel());
+		value = new JLabel(src.getValue().toString());
+		id = src.getId();
+		this.setLayout(new GridLayout(1, 2));
+		this.add(label);
+		this.add(value);
+		this.setMaximumSize(new Dimension(40,200));
+		this.setVisible(true);
+	}
+	public void changeValue(Number n){
+		this.value.setText(n.toString());
+	}
+	public JLabel getLabel() {
+		return label;
+	}
+	public void setLabel(JLabel label) {
+		this.label = label;
+	}
+	public JLabel getValue() {
+		return value;
+	}
+	public void setValue(JLabel value) {
+		this.value = value;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
+
+	
+
+}
