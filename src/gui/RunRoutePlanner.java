@@ -22,6 +22,7 @@ public class RunRoutePlanner {
 		
 		
 		RoutePlannerFrame frame = new RoutePlannerFrame(set);
+		frame.run();
 	}
 	
 }

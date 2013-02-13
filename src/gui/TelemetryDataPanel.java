@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import data.DataCell;
@@ -19,12 +20,16 @@ import data.DataSet;
  */
 public class TelemetryDataPanel extends JPanel {
 
+	DataSet dataSet;
 	ArrayList<DataCellPanel> cells = new ArrayList<DataCellPanel>();
+	
+	
 	/**
 	 * 
 	 */
 	public TelemetryDataPanel(int rows, int cols, DataSet dataSet) {
 		super(new BorderLayout());
+		this.dataSet = dataSet;
 		JPanel panel = new JPanel();	
 		panel.setLayout(new GridLayout(rows, cols));
 	
@@ -56,6 +61,21 @@ public class TelemetryDataPanel extends JPanel {
 			if(cp.getId().equals(id)) return cp;
 		}
 		return null;
+	}
+	
+	/**
+	 * Updates all data labels with values from dataSet
+	 */
+	public void updateCells(){
+		for(DataCellPanel cell : cells){
+			/*
+			 * That really is awful, but basically it gets value from the dataSet
+			 * (by the id of the DataCellPanel) and changes the label of the cell.
+			 */
+			cell.changeValue(dataSet.getValueByKey(cell.getId()));
+		}
+		this.invalidate();
+		this.repaint();
 	}
 
 	

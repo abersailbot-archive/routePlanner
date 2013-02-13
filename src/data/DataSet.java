@@ -47,6 +47,16 @@ public class DataSet {
 		System.out.println("Cannot update data : key does not exist ("+key+")");
 	}
 	
+	public Number getValueByKey(String key){
+		for(DataCell item : dataSet){
+			if(item.getId().equals(key)){
+				return item.getValue();
+			}
+		}
+		System.out.println("Cannot find value : key does not exist ("+key+")");
+		return 0;
+	}
+	
 	
 	
 }
