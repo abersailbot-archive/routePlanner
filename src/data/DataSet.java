@@ -37,6 +37,16 @@ public class DataSet {
 		this.dataSet = dataSet;
 	}
 	
+	public void updateDataCell(String key, Number value){
+		for(DataCell item : dataSet){
+			if(item.getId().equals(key)){
+				item.setValue(value);
+				return;
+			}
+		}
+		System.out.println("Cannot update data : key does not exist ("+key+")");
+	}
+	
 	
 	
 }
