@@ -44,7 +44,7 @@ public class DataSet {
 				return;
 			}
 		}
-		System.out.println("Cannot update data : key does not exist ("+key+")");
+		System.out.println("Cannot update data : dataset does not contain ("+key+")");
 	}
 	
 	public Number getValueByKey(String key){
@@ -53,7 +53,7 @@ public class DataSet {
 				return item.getValue();
 			}
 		}
-		System.out.println("Cannot find value : key does not exist ("+key+")");
+		System.out.println("Cannot find value : dataset does not contain ("+key+")");
 		return 0;
 	}
 	

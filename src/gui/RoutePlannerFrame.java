@@ -13,9 +13,9 @@ import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
 
-import receiver.AbstractDataReceiver;
-import receiver.MockDataReceiver;
 import data.DataSet;
+import datareceiver.AbstractDataReceiver;
+import datareceiver.UdpDataReceiver;
 
 /**
  * @author kamil
@@ -34,7 +34,7 @@ public class RoutePlannerFrame extends JFrame {
 		this.setSize(700, 500);
 		this.setTitle("RoutePlanner v2");
 		this.dataSet = dataSet;
-		this.dr = new MockDataReceiver(dataSet);
+		this.dr = new UdpDataReceiver(dataSet);
 		
 		JTabbedPane tabs = new JTabbedPane();
 		
