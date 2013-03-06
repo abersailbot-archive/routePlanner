@@ -549,7 +549,7 @@ public class RoutePlanner extends JFrame implements ActionListener, ComponentLis
         String filename;
         if (args.length == 0)
         {
-            filename = "maps/aber_os.png";
+            filename = "maps/aberystwyth.png";
         }
         else
         {
