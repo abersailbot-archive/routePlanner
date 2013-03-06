@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -31,7 +32,7 @@ public class TelemetryDataPanel extends JPanel {
 		super(new BorderLayout());
 		this.dataSet = dataSet;
 		JPanel panel = new JPanel();	
-		panel.setLayout(new GridLayout(rows, cols));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	
 		for(DataCell cell : dataSet.getDataSet()){
 			cells.add(new DataCellPanel(cell));
@@ -78,6 +79,21 @@ public class TelemetryDataPanel extends JPanel {
 		this.repaint();
 	}
 
-	
+	/**
+	 * Allows to choose which data will not be displayed on the panel.
+	 * @param id
+	 */
+	public void stopDisplaying(String id){
+		for(int i = 0; i<this.cells.size(); i++){
+			if(this.cells.get(i).getId().equals(id)){
+				//this.remove(this.cells.get(i));
+				this.validate();	
+				this.cells.remove(i);
+				return;
+			}
+				
+		}
+		System.out.print("Cannot stop displaying "+id+". Such cell does not exist.");
+	}
 
 }

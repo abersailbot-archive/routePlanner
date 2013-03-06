@@ -3,6 +3,7 @@
  */
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -29,10 +30,10 @@ public class DataCellPanel extends JPanel {
 		label = new JLabel(src.getLabel());
 		value = new JLabel(src.getValue().toString());
 		id = src.getId();
-		this.setLayout(new GridLayout(1, 2));
-		this.add(label);
-		this.add(value);
-		this.setMaximumSize(new Dimension(40,200));
+		this.setLayout(new BorderLayout(10, 10));
+		this.add(label, BorderLayout.CENTER);
+		this.add(value, BorderLayout.EAST);
+//		this.setMaximumSize(new Dimension(40,200));
 		this.setVisible(true);
 	}
 	public void changeValue(Number n){
