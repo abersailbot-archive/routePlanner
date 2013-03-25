@@ -4,8 +4,7 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.text.DecimalFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +12,7 @@ import javax.swing.JPanel;
 import data.DataCell;
 
 /**
- * @author kamil
+ * @author Kamil Mrowiec <kam20@aber.ac.uk>
  *
  */
 public class DataCellPanel extends JPanel {

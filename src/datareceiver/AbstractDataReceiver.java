@@ -1,4 +1,5 @@
 package datareceiver;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -12,6 +13,8 @@ import data.DataSet;
  */
 public abstract class AbstractDataReceiver {
 
+	private static final String DECIMAL_FORMAT = "0.00000";
+	
 	/**
 	 * DataSet that will be changed with every 
 	 * call to updateDataSet()
@@ -48,7 +51,7 @@ public abstract class AbstractDataReceiver {
 		}
 		
 		String kvps[] = this.dataString.split(" ");
-		String buffer[];
+		String buffer[]; //will containt 2 elements, key and value
 		Number value = 0;
 		
 		for(String s : kvps){
@@ -56,7 +59,14 @@ public abstract class AbstractDataReceiver {
 			if(buffer==null || buffer.length!=2) continue; //Data read incorrectly.
 			
 			try{
-				value = NumberFormat.getInstance().parse(buffer[1]);
+				DecimalFormat df = new DecimalFormat(DECIMAL_FORMAT);
+				buffer[1] = df.format(df.parse(buffer[1]));
+				value = df.parse(buffer[1]);
+				if(buffer[1].contains(".")){
+					
+				}
+				
+				//value = NumberFormat.getInstance().parse(buffer[1]);
 			}catch(ParseException ex){
 				System.out.print("Could not parse "+buffer[1]);
 				ex.printStackTrace();

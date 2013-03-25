@@ -4,9 +4,9 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -16,36 +16,53 @@ import data.DataCell;
 import data.DataSet;
 
 /**
- * @author kamil
+ * @author Kamil Mrowiec <kam20@aber.ac.uk>
  *
  */
 public class TelemetryDataPanel extends JPanel {
 
+	//Pointer to dataset that will always contain fresh data
 	DataSet dataSet;
+	
+	JPanel dataPanel, bottomPanel;
+	JLabel lastUpdate;
+	
 	ArrayList<DataCellPanel> cells = new ArrayList<DataCellPanel>();
 	
 	
 	/**
-	 * 
+	 * Constructor for the TelemetryDataPanel. 
+	 * As telemetry data is displayed here in a grid layout, 
+	 * it takes numbers of rows and column we expect for this layout.
+	 * Also allows to ignore some data (e. g. when we will display it in a non-standard way).
+	 * @param rows number of rows
+	 * @param cols number of columns 
+	 * @param dataSet source DataSet for the panel data
+	 * @param ignored keys to be omitted
 	 */
-	public TelemetryDataPanel(int rows, int cols, DataSet dataSet) {
+	public TelemetryDataPanel(int rows, int cols, DataSet dataSet, Collection<String> ignored) {
 		super(new BorderLayout());
 		this.dataSet = dataSet;
-		JPanel panel = new JPanel();	
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		dataPanel = new JPanel();
+		bottomPanel = new JPanel();
+		lastUpdate = new JLabel("Panel created");
+		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
 	
-		for(DataCell cell : dataSet.getDataSet()){
-			cells.add(new DataCellPanel(cell));
+		for(DataCell dataCell : dataSet.getDataSet()){
+			if(!ignored.contains(dataCell.getId()))
+			cells.add(new DataCellPanel(dataCell));
 		}
 		
 		for(DataCellPanel cell : cells){
-			panel.add(cell);
+			dataPanel.add(cell);
 		}
 		
-		this.add(panel, BorderLayout.NORTH);
-		this.setVisible(true);
+		this.add(dataPanel, BorderLayout.NORTH);
 		
-		this.getCellPanelById("lat").changeValue(40);
+		bottomPanel.add(lastUpdate);
+		this.add(bottomPanel);
+		
+		this.setVisible(true);
 		
 	}
 	
@@ -79,21 +96,15 @@ public class TelemetryDataPanel extends JPanel {
 		this.repaint();
 	}
 
-	/**
-	 * Allows to choose which data will not be displayed on the panel.
-	 * @param id
-	 */
-	public void stopDisplaying(String id){
-		for(int i = 0; i<this.cells.size(); i++){
-			if(this.cells.get(i).getId().equals(id)){
-				//this.remove(this.cells.get(i));
-				this.validate();	
-				this.cells.remove(i);
-				return;
-			}
-				
-		}
-		System.out.print("Cannot stop displaying "+id+". Such cell does not exist.");
+	public void updatePanel(){
+		this.updateCells();
+		
+		Number timestamp = dataSet.getValueByKey("time");
+		
+		Date now = new Date();
+		double secDiff = (now.getTime() - (Long) timestamp ) * 0.001;
+		
+		lastUpdate.setText(secDiff < 1 ? "Updated less than a second ago." : "Updated " + secDiff + " seconds ago.");
+		
 	}
-
 }

@@ -5,6 +5,7 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ import datareceiver.AbstractDataReceiver;
 import datareceiver.MockDataReceiver;
 
 /**
- * @author kamil
+ * @author Kamil Mrowiec <kam20@aber.ac.uk>
  *
  */
 public class RoutePlannerFrame extends JFrame {
@@ -31,32 +32,6 @@ public class RoutePlannerFrame extends JFrame {
 	AbstractDataReceiver dr;
 	MapMarkerDot boatMarker;
 	
-//	public RoutePlannerFrame(DataSet dataSet){
-//		
-//		this.setSize(700, 500);
-//		this.setTitle("RoutePlanner v2");
-//		this.dataSet = dataSet;
-//		this.dr = new UdpDataReceiver(dataSet);
-//		
-//		JTabbedPane tabs = new JTabbedPane();
-//		
-//		
-//		map = new JMapViewer();
-//		TileSource ts = new OfflineOsmTileSource("file:///media/DATA/programowanie_linux/RoutePlanner2/tiles",15,17);
-//		
-//		map.setDisplayPositionByLatLon(52.41156, -4.08975, 15);
-//		boatMarker = new MapMarkerDot(Color.RED, 52.41156, -4.08975);
-//		map.addMapMarker(boatMarker);
-//		map.setTileSource(ts);
-//		
-//		this.getContentPane().add(tabs);
-//		tabs.addTab("Map", map);
-//		
-//		tp = new TelemetryDataPanel(6,2, dataSet);
-//		tabs.addTab("Telemetry", tp);
-//		this.setVisible(true);
-//		
-//		}
 	
 public RoutePlannerFrame(DataSet dataSet){
 		
@@ -77,8 +52,9 @@ public RoutePlannerFrame(DataSet dataSet){
 		JPanel leftPanel = new JPanel();
 		leftPanel.setBorder(new EmptyBorder(5,5,5,5));
 		
-		tp = new TelemetryDataPanel(6,2, dataSet);
-		tp.stopDisplaying("time");
+		
+		String[] ignoredData = {"time"};
+		tp = new TelemetryDataPanel(6,2, dataSet, Arrays.asList(ignoredData));
 		leftPanel.add(tp);
 		
 		this.getContentPane().setLayout(new BorderLayout());
@@ -96,7 +72,7 @@ public RoutePlannerFrame(DataSet dataSet){
 			
 		while(true){
 			dr.updateDataSet();
-			tp.updateCells();
+			tp.updatePanel();
 			this.updateBoatPosition();
 			this.invalidate();
 			Thread.sleep(1000);
