@@ -5,10 +5,12 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.File;
 import java.util.Arrays;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -19,6 +21,7 @@ import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
 import data.DataSet;
 import datareceiver.AbstractDataReceiver;
 import datareceiver.MockDataReceiver;
+import datareceiver.SerialDataReceiver;
 
 /**
  * @author Kamil Mrowiec <kam20@aber.ac.uk>
@@ -37,12 +40,15 @@ public RoutePlannerFrame(DataSet dataSet){
 		
 		this.setSize(700, 500);
 		this.setTitle("RoutePlanner v2");
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.dataSet = dataSet;
 		this.dr = new MockDataReceiver(dataSet);
+		SerialDataReceiver test = new SerialDataReceiver(dataSet, "");
 		
 		
 		map = new JMapViewer();
-		TileSource ts = new OfflineOsmTileSource("file:///media/DATA/programowanie_linux/RoutePlanner2/tiles",15,17);
+		File mapFolder = new File("./tiles");
+		TileSource ts = new OfflineOsmTileSource("file://"+mapFolder.getAbsolutePath(),15,17);
 		
 		map.setDisplayPositionByLatLon(52.41156, -4.08975, 15);
 		boatMarker = new MapMarkerDot(Color.RED, 52.41156, -4.08975);
