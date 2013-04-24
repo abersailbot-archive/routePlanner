@@ -45,7 +45,7 @@ public class TelemetryDataPanel extends JPanel {
 		this.dataSet = dataSet;
 		dataPanel = new JPanel();
 		bottomPanel = new JPanel();
-		lastUpdate = new JLabel("Panel created");
+		lastUpdate = new JLabel("Waiting for data...");
 		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
 	
 		for(DataCell dataCell : dataSet.getDataSet()){

@@ -47,11 +47,12 @@ public RoutePlannerFrame(DataSet dataSet){
 		
 		
 		map = new JMapViewer();
-		File mapFolder = new File("./tiles");
+		File mapFolder = new File("./llyn-yr-oerfa");
 		TileSource ts = new OfflineOsmTileSource("file://"+mapFolder.getAbsolutePath(),15,17);
 		
-		map.setDisplayPositionByLatLon(52.41156, -4.08975, 15);
-		boatMarker = new MapMarkerDot(Color.RED, 52.41156, -4.08975);
+		//map.setDisplayPositionByLatLon(52.41156, -4.08975, 15); // Aber
+		map.setDisplayPositionByLatLon(52.4008, -3.8713, 15); //llyn-yr-oerfa
+		boatMarker = new MapMarkerDot(Color.RED, 52.4008, -3.8713);
 		map.addMapMarker(boatMarker);
 		map.setTileSource(ts);
 		
