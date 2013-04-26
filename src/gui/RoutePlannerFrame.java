@@ -43,11 +43,12 @@ public RoutePlannerFrame(DataSet dataSet){
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.dataSet = dataSet;
 		this.dr = new MockDataReceiver(dataSet);
-		SerialDataReceiver test = new SerialDataReceiver(dataSet, "");
-		
+		SerialDataReceiver test = new SerialDataReceiver(dataSet, "/dev/ttyUSB0");
+		this.dr= test;
 		
 		map = new JMapViewer();
 		File mapFolder = new File("./llyn-yr-oerfa");
+		//File mapFolder = new File("./tiles");
 		TileSource ts = new OfflineOsmTileSource("file://"+mapFolder.getAbsolutePath(),15,17);
 		
 		//map.setDisplayPositionByLatLon(52.41156, -4.08975, 15); // Aber
@@ -92,11 +93,16 @@ public RoutePlannerFrame(DataSet dataSet){
 	}
 	
 	private void updateBoatPosition(){
+		try{
 		Double lat = (Double) dataSet.getValueByKey("lat");
 		Double lon = (Double) dataSet.getValueByKey("lon");
 		//TODO Find a better way of doing that
 		map.removeMapMarker(boatMarker);
 		boatMarker = new MapMarkerDot(Color.RED, lat, lon);
 		map.addMapMarker(boatMarker);
+		map.setDisplayPositionByLatLon(lat, lon, map.getZoom()); // Aber
+		}catch(Exception ex){
+			//ex.printStackTrace();
+		}
 	}
 }

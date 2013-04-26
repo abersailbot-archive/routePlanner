@@ -98,13 +98,16 @@ public class TelemetryDataPanel extends JPanel {
 
 	public void updatePanel(){
 		this.updateCells();
-		
+		try{
 		Number timestamp = dataSet.getValueByKey("time");
 		
 		Date now = new Date();
 		double secDiff = (now.getTime() - (Long) timestamp ) * 0.001;
 		
-		lastUpdate.setText(secDiff < 1 ? "Updated less than a second ago." : "Updated " + secDiff + " seconds ago.");
-		
+		//lastUpdate.setText(secDiff < 1 ? "Updated less than a second ago." : "Updated " + secDiff + " seconds ago.");
+		lastUpdate.setText(timestamp.toString());
+		}catch(Exception ex){
+			//ex.printStackTrace();
+		}
 	}
 }
