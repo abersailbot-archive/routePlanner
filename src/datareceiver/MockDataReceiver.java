@@ -40,9 +40,9 @@ public class MockDataReceiver extends AbstractDataReceiver {
 		
 		StringBuilder sb = new StringBuilder();
 		sb.append("spd=").append(gen.nextInt(100)+1)
-		.append(" bhead=").append(gen.nextInt(100)+1)
+		.append(" bhead=").append(290)
 		.append(" thead=").append(gen.nextInt(100)+1)
-		.append(" wind=").append(gen.nextInt(100)+1)
+		.append(" wind=").append(gen.nextInt(359)+1)
 		.append(" spos=").append(gen.nextInt(100)+1)
 		.append(" rpos=").append(gen.nextInt(100)+1)
 		.append(" time=").append(d.getTime())

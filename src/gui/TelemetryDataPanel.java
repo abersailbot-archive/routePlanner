@@ -11,6 +11,7 @@ import java.util.Date;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import data.DataCell;
 import data.DataSet;
@@ -40,13 +41,15 @@ public class TelemetryDataPanel extends JPanel {
 	 * @param dataSet source DataSet for the panel data
 	 * @param ignored keys to be omitted
 	 */
-	public TelemetryDataPanel(int rows, int cols, DataSet dataSet, Collection<String> ignored) {
+	public TelemetryDataPanel(int rows, int cols, Collection<String> ignored) {
 		super(new BorderLayout());
-		this.dataSet = dataSet;
+		this.dataSet = DataSet.getInstance();
 		dataPanel = new JPanel();
 		bottomPanel = new JPanel();
 		lastUpdate = new JLabel("Waiting for data...");
 		dataPanel.setLayout(new BoxLayout(dataPanel, BoxLayout.Y_AXIS));
+		
+		this.setBorder(new EmptyBorder(8,8,8,8));
 	
 		for(DataCell dataCell : dataSet.getDataSet()){
 			if(!ignored.contains(dataCell.getId()))

@@ -11,11 +11,18 @@ import java.util.ArrayList;
  */
 public class DataSet {
 
+	private static DataSet instance;
+	
 	private ArrayList<DataCell> dataSet;
 	
 	
-	public DataSet(){
+	private DataSet(){
 		dataSet = new ArrayList<DataCell>();
+	}
+	
+	public static DataSet getInstance(){
+		if(instance==null) instance = new DataSet();
+		return instance;
 	}
 	
 	public DataSet addDataCell(DataCell cell){
