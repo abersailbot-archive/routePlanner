@@ -3,16 +3,21 @@
  */
 package gui;
 
-import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
-import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataListener;
+
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import data.Waypoints;
 
@@ -20,9 +25,40 @@ import data.Waypoints;
  * @author Kamil Mrowiec <kam20@aber.ac.uk>
  * @version 1.0 (6 May 2013)
  */
-public class WaypointsPanel extends JPanel implements MouseListener, KeyListener{
+public class WaypointsPanel extends JPanel implements MouseListener, KeyListener, ActionListener{
 	
-	JTextArea text = new JTextArea();
+	private class WaypointListModel implements ListModel{
+
+		
+		public WaypointListModel(){
+		}
+		
+		@Override
+		public void addListDataListener(ListDataListener arg0){
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public Object getElementAt(int arg0){
+			return waypoints.getStringRepresentation(arg0);
+		}
+
+		@Override
+		public int getSize(){
+			return waypoints.getPoints().size();
+		}
+
+		@Override
+		public void removeListDataListener(ListDataListener arg0){
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	JList wpList = new JList();
+	JButton load, save;
 	Waypoints waypoints;
 	boolean editable = false;
 
@@ -33,12 +69,28 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 		super();
 		this.waypoints = wps;
 		
+		wpList = new JList(new WaypointListModel());
+		this.add(wpList);
+		
+		save = new JButton("Save to file");
+		load = new JButton("Load from file");
+		
+		save.addActionListener(this);
+		load.addActionListener(this);
+		
+		this.add(save);
+		this.add(load);
+		
+		
 	}
 	
 	public void refresh(){
-		for(Point wp : waypoints.getPoints()){
-			text.setText(text.getText()+ wp.getX() + ", " + wp.getY() + "/n");
-		}
+		this.remove(wpList);
+		wpList = new JList(new WaypointListModel());
+		this.add(wpList);
+		//this.invalidate();
+		this.validate();
+		//this.repaint();
 	}
 
 	@Override
@@ -61,14 +113,20 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 
 	@Override
 	public void mousePressed(MouseEvent arg0){
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0){
+		if(!this.isVisible()) return;
+			
 		if(arg0.getButton()==MouseEvent.BUTTON1){
 			System.out.println("Key event");
+			System.out.println(arg0.getPoint());
+			RoutePlannerFrame frame = RoutePlannerFrame.getInstance();
+			Coordinate pos = frame.getMap().getPosition(arg0.getPoint());
+			System.out.println(pos);
+			this.waypoints.add(pos);
+			this.refresh();
 		}
 		
 	}
@@ -96,6 +154,17 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 	@Override
 	public void keyTyped(KeyEvent arg0){
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0){
+		if(arg0.getSource()==this.save){
+			this.waypoints.saveToFile();
+		}else if(arg0.getSource()==this.load){
+			this.waypoints.readFromFile(new File("waypoints.txt"));
+			this.refresh();
+		}
 		
 	}
 	

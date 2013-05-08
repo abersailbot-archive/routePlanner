@@ -40,12 +40,15 @@ public class RoutePlannerFrame extends JFrame {
 	JPanel sidePanel;
 	LogReaderPanel controller;
 	DataSet dataSet;
-	AbstractDataReceiver dr;
+	
 	MapBoatIndicator boatMarker;
 	Waypoints waypoints = new Waypoints();
 	WaypointsPanel wpPanel = new WaypointsPanel(waypoints);
 	
 	boolean followBoat;
+	
+	AbstractDataReceiver dr;
+	LogFileReader lfr;
 	
 
 	public static RoutePlannerFrame getInstance(){
@@ -63,8 +66,8 @@ public class RoutePlannerFrame extends JFrame {
 		this.dataSet = DataSet.getInstance();
 		//this.dr = new MockDataReceiver(dataSet);
 		//SerialDataReceiver test = new SerialDataReceiver(dataSet, "/dev/ttyUSB0");
-		LogFileReader lfr = new LogFileReader(dataSet);
-		this.dr= lfr;
+		lfr = new LogFileReader(dataSet);
+		//this.dr= lfr;
 		
 		map = new JMapViewer();
 		File mapFolder = new File("./llyn-yr-oerfa");
@@ -81,14 +84,15 @@ public class RoutePlannerFrame extends JFrame {
 		tp = new TelemetryDataPanel(6,2, Arrays.asList(ignoredData));
 		
 		tabbedPanel = new JTabbedPane();
-		//sidePanel.setBorder(new EmptyBorder(3,3,3,3));
 		tabbedPanel.addTab("Telemetry", tp);
+		tabbedPanel.addTab("Waypoints", wpPanel);
 		
 		sidePanel = new JPanel(new BorderLayout());
 		sidePanel.add(tabbedPanel, BorderLayout.CENTER);
 		
 		controller = new LogReaderPanel(lfr);
 		sidePanel.add(controller, BorderLayout.SOUTH);
+		controller.setVisible(false);
 		lfr.setController(controller);
 		
 		this.getContentPane().setLayout(new BorderLayout());
@@ -108,11 +112,13 @@ public class RoutePlannerFrame extends JFrame {
 		
 			
 		while(true){
-			dr.updateDataSet();
-			tp.updatePanel();
-			this.updateBoatPosition();
-			this.invalidate();
-			Thread.sleep(1000);
+			if(this.dr!=null){
+				dr.updateDataSet();
+				tp.updatePanel();
+				this.updateBoatPosition();
+				this.invalidate();
+			}
+			Thread.sleep(1000);			
 		}
 		
 		
@@ -129,10 +135,9 @@ public class RoutePlannerFrame extends JFrame {
 			this.dr = new SerialDataReceiver(dataSet, "/dev/ttyUSB0");
 			this.controller.setVisible(false);
 		}else if(dataSource.equals("logfile")){
-			LogFileReader lfr = new LogFileReader(dataSet);
-			this.dr = lfr;
-			lfr.setController(this.controller);
-			this.controller.setReader(lfr);
+			this.dr = this.lfr;
+			//lfr.setController(this.controller);
+			//this.controller.setReader(lfr);
 			this.controller.refresh();
 			this.controller.setVisible(true);
 		}
@@ -155,5 +160,9 @@ public class RoutePlannerFrame extends JFrame {
 
 	public void setFollowBoat(boolean followBoat){
 		this.followBoat = followBoat;
+	}
+
+	public JMapViewer getMap(){
+		return map;
 	}
 }
