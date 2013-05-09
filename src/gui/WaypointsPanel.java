@@ -3,6 +3,7 @@
  */
 package gui;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -18,6 +19,7 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.MapWaypointMarker;
 
 import data.Waypoints;
 
@@ -66,11 +68,11 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 	 * 
 	 */
 	public WaypointsPanel(Waypoints wps){
-		super();
+		super(new BorderLayout());
 		this.waypoints = wps;
 		
 		wpList = new JList(new WaypointListModel());
-		this.add(wpList);
+		this.add(wpList, BorderLayout.CENTER);
 		
 		save = new JButton("Save to file");
 		load = new JButton("Load from file");
@@ -78,19 +80,29 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 		save.addActionListener(this);
 		load.addActionListener(this);
 		
-		this.add(save);
-		this.add(load);
+		this.add(save, BorderLayout.SOUTH);
+		this.add(load, BorderLayout.NORTH);
 		
 		
 	}
 	
 	public void refresh(){
 		this.remove(wpList);
-		wpList = new JList(new WaypointListModel());
-		this.add(wpList);
-		//this.invalidate();
+		wpList = new JList(new WaypointListModel()); //FIXME ugly, ugly way :(
+		this.add(wpList, BorderLayout.CENTER);
+		refreshMarkers();
 		this.validate();
-		//this.repaint();
+		this.repaint();
+	}
+	
+	public void refreshMarkers(){
+		RoutePlannerFrame frame = RoutePlannerFrame.getInstance();
+		frame.getMap().removeAllWaypointMarkers();
+		for(int i = 0; i < this.waypoints.getPoints().size(); i++){
+			Coordinate c = this.waypoints.getPoints().get(i);
+			frame.getMap().addMapMarker(new MapWaypointMarker(c, i));
+		}
+		frame.getMap().validate();
 	}
 
 	@Override

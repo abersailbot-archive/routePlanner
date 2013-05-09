@@ -859,7 +859,12 @@ public class JMapViewer extends JPanel implements TileLoaderListener {
     }
 
     public void addMapMarker(MapMarker marker) {
-        mapMarkerList.add(marker);
+    	//Hacked so that boat indicator marker will always stay at the end
+    	//of the list, therefore will be painted last, not obscured by anything
+    	if(marker instanceof MapBoatIndicator)
+    		mapMarkerList.add(marker);
+    	else
+    		mapMarkerList.add(mapMarkerList.size()-1, marker);
         repaint();
     }
 
@@ -871,6 +876,17 @@ public class JMapViewer extends JPanel implements TileLoaderListener {
     public void removeAllMapMarkers() {
         mapMarkerList.clear();
         repaint();
+    }
+    
+    public void removeAllWaypointMarkers(){
+    	for(int i = 0; i < mapMarkerList.size(); i++){
+    		MapMarker m = mapMarkerList.get(i);
+    		if(m instanceof MapWaypointMarker){
+    			mapMarkerList.remove(m);
+    			i--;
+    		}
+    	}
+    	repaint();
     }
 
     public void addMapRectangle(MapRectangle rectangle) {
