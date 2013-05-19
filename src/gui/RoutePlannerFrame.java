@@ -5,6 +5,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -19,7 +21,11 @@ import org.openstreetmap.gui.jmapviewer.MapBoatIndicator;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OfflineOsmTileSource;
 
+import sun.awt.WindowClosingListener;
+import sun.security.action.GetIntegerAction;
+
 import data.DataSet;
+import data.Settings;
 import data.Waypoints;
 import datareceiver.AbstractDataReceiver;
 import datareceiver.LogFileReader;
@@ -30,7 +36,7 @@ import datareceiver.SerialDataReceiver;
  * @author Kamil Mrowiec <kam20@aber.ac.uk>
  *
  */
-public class RoutePlannerFrame extends JFrame {
+public class RoutePlannerFrame extends JFrame implements WindowListener {
 
 	private static RoutePlannerFrame instance;
 	
@@ -58,6 +64,8 @@ public class RoutePlannerFrame extends JFrame {
 	
 	private RoutePlannerFrame(){
 		
+		Settings.loadFromFile();
+		
 		this.setSize(700, 500);
 		this.setTitle("RoutePlanner v2");
 		MenuBar mb = new MenuBar();
@@ -70,15 +78,23 @@ public class RoutePlannerFrame extends JFrame {
 		//this.dr= lfr;
 		
 		map = new JMapViewer();
-		File mapFolder = new File("./llyn-yr-oerfa");
-		//File mapFolder = new File("./tiles");
-		TileSource ts = new OfflineOsmTileSource("file://"+mapFolder.getAbsolutePath(),15,17);
+		String mapFolderName = Settings.getString(Settings.MAP_FOLDER);
+		int minZoom = Settings.getInteger(Settings.MAP_MIN_ZOOM);
+		int maxZoom = Settings.getInteger(Settings.MAP_MAX_ZOOM);
+		File mapFolder = new File(mapFolderName);
+		map.setTileSource(new OfflineOsmTileSource("file://"
+				+ mapFolder.getAbsolutePath(), minZoom, maxZoom));
 		
 		//map.setDisplayPositionByLatLon(52.41156, -4.08975, 15); // Aber
-		map.setDisplayPositionByLatLon(52.4008, -3.8713, 15); //llyn-yr-oerfa
-		boatMarker = new MapBoatIndicator(52.4008, -3.8713);
+		//map.setDisplayPositionByLatLon(52.4008, -3.8713, 15); //llyn-yr-oerfa
+		double lat = Settings.getDouble(Settings.MAP_LAT);
+		double lon = Settings.getDouble(Settings.MAP_LON);
+		map.setDisplayPositionByLatLon(lat, lon, minZoom);
+		
+		boatMarker = new MapBoatIndicator(lat, lon);
 		map.addMapMarker(boatMarker);
-		map.setTileSource(ts);
+		followBoat = Settings.getBoolean(Settings.FOLLOW_ROBOT);
+		
 		
 		String[] ignoredData = {"time"};
 		tp = new TelemetryDataPanel(6,2, Arrays.asList(ignoredData));
@@ -104,6 +120,7 @@ public class RoutePlannerFrame extends JFrame {
 		this.addKeyListener(wpPanel);
 		sidePanel.addKeyListener(wpPanel);
 		this.setVisible(true);
+		this.addWindowListener(this);
 		
 		}
 	
@@ -165,4 +182,46 @@ public class RoutePlannerFrame extends JFrame {
 	public JMapViewer getMap(){
 		return map;
 	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0){
+		Settings.saveToFile();
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0){
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0){
+		// TODO Auto-generated method stub
+		
+	}
+
 }

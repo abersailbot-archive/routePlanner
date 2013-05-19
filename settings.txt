@@ -1,0 +1,8 @@
+#Settings
+#Sun May 19 22:11:27 BST 2013
+mapFolder=map
+mapLongitude=-4.08975
+mapMinZoomLevel=15
+mapMaxZoomLevel=18
+mapLattitude=52.41156
+followRobot=true

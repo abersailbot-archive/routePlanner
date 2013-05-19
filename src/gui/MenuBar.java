@@ -14,6 +14,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JToggleButton;
 
+import data.Settings;
+
 /**
  * @author Kamil Mrowiec <kam20@aber.ac.uk>
  * @version 1.0 (5 May 2013)
@@ -43,6 +45,7 @@ public class MenuBar extends JMenuBar implements ActionListener{
 		log.addActionListener(this);
 		
 		followBoat = new JCheckBoxMenuItem("Follow boat");
+		followBoat.setSelected(Settings.getBoolean(Settings.FOLLOW_ROBOT));
 		followBoat.addActionListener(this);
 		
 		this.add(dataSourceMenu);
@@ -62,8 +65,8 @@ public class MenuBar extends JMenuBar implements ActionListener{
 		}else if(message.equals("Log file")){
 			RoutePlannerFrame.getInstance().setDataSource("logfile");
 		}else if(message.equals("Follow boat")){
-			if(followBoat.isSelected()) RoutePlannerFrame.getInstance().setFollowBoat(true);
-			else RoutePlannerFrame.getInstance().setFollowBoat(false);
+			RoutePlannerFrame.getInstance().setFollowBoat(followBoat.isSelected());
+			Settings.set(Settings.FOLLOW_ROBOT, followBoat.isSelected());
 		}
 	}
 }
