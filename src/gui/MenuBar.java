@@ -30,9 +30,13 @@ public class MenuBar extends JMenuBar implements ActionListener{
 		
 		ButtonGroup radio = new ButtonGroup();
 		JRadioButtonMenuItem none = new JRadioButtonMenuItem("None");
+		none.setActionCommand("none");
 		JRadioButtonMenuItem mock = new JRadioButtonMenuItem("Mock");
+		mock.setActionCommand("mock");
 		JRadioButtonMenuItem serial = new JRadioButtonMenuItem("Serial");
+		serial.setActionCommand("serial");
 		JRadioButtonMenuItem log = new JRadioButtonMenuItem("Log file");
+		log.setActionCommand("logfile");
 		radio.add(none);
 		radio.add(mock);
 		radio.add(serial);
@@ -41,6 +45,8 @@ public class MenuBar extends JMenuBar implements ActionListener{
 		dataSourceMenu.add(mock);
 		dataSourceMenu.add(serial);
 		dataSourceMenu.add(log);
+		
+		none.setSelected(true);
 		
 		mock.addActionListener(this);
 		serial.addActionListener(this);
@@ -60,13 +66,14 @@ public class MenuBar extends JMenuBar implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent arg0){
 		String message = arg0.getActionCommand();
-		if(message.equals("Mock")){
-			RoutePlannerFrame.getInstance().setDataSource("mock");
-		}else if(message.equals("Serial")){
-			RoutePlannerFrame.getInstance().setDataSource("serial");
-		}else if(message.equals("Log file")){
-			RoutePlannerFrame.getInstance().setDataSource("logfile");
-		}else if(message.equals("Follow boat")){
+		switch(message){
+		case "none":
+		case "mock":
+		case "serial":
+		case "logfile":
+			RoutePlannerFrame.getInstance().setDataSource(message);
+			break;
+		case "Follow boat":
 			RoutePlannerFrame.getInstance().setFollowBoat(followBoat.isSelected());
 			Settings.set(Settings.FOLLOW_ROBOT, followBoat.isSelected());
 		}

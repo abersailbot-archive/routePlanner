@@ -142,14 +142,21 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 	}
 	
 	public void setDataSource(String dataSource){
-		if(dataSource.equals("mock")){
+		switch(dataSource){
+		case "none":
+			this.activeDataReceiver = null;
+			this.controller.setVisible(false);
+			break;
+		case "mock":
 			this.activeDataReceiver = new MockDataReceiver(dataSet);
 			this.controller.setVisible(false);
-		}else if(dataSource.equals("serial")){
+			break;
+		case "serial":
 			String portName = Settings.getString(Settings.SERIAL_PORT);
 			this.activeDataReceiver = new SerialDataReceiver(dataSet, portName);
 			this.controller.setVisible(false);
-		}else if(dataSource.equals("logfile")){
+			break;
+		case "logfile":
 			this.activeDataReceiver = this.logFileReader;
 			this.controller.refresh();
 			this.controller.setVisible(true);
