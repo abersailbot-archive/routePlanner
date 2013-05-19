@@ -53,8 +53,8 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 	
 	boolean followBoat;
 	
-	AbstractDataReceiver dr;
-	LogFileReader lfr;
+	AbstractDataReceiver activeDataReceiver;
+	LogFileReader logFileReader;
 	
 
 	public static RoutePlannerFrame getInstance(){
@@ -72,10 +72,7 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 		this.setJMenuBar(mb);
 		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.dataSet = DataSet.getInstance();
-		//this.dr = new MockDataReceiver(dataSet);
-		//SerialDataReceiver test = new SerialDataReceiver(dataSet, "/dev/ttyUSB0");
-		lfr = new LogFileReader(dataSet);
-		//this.dr= lfr;
+		logFileReader = new LogFileReader(dataSet);
 		
 		map = new JMapViewer();
 		String mapFolderName = Settings.getString(Settings.MAP_FOLDER);
@@ -106,10 +103,10 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 		sidePanel = new JPanel(new BorderLayout());
 		sidePanel.add(tabbedPanel, BorderLayout.CENTER);
 		
-		controller = new LogReaderPanel(lfr);
+		controller = new LogReaderPanel(logFileReader);
 		sidePanel.add(controller, BorderLayout.SOUTH);
 		controller.setVisible(false);
-		lfr.setController(controller);
+		logFileReader.setController(controller);
 		
 		this.getContentPane().setLayout(new BorderLayout());
 		this.getContentPane().add(sidePanel, BorderLayout.WEST);
@@ -129,8 +126,8 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 		
 			
 		while(true){
-			if(this.dr!=null){
-				dr.updateDataSet();
+			if(this.activeDataReceiver!=null){
+				activeDataReceiver.updateDataSet();
 				tp.updatePanel();
 				this.updateBoatPosition();
 				this.invalidate();
@@ -146,15 +143,14 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 	
 	public void setDataSource(String dataSource){
 		if(dataSource.equals("mock")){
-			this.dr = new MockDataReceiver(dataSet);
+			this.activeDataReceiver = new MockDataReceiver(dataSet);
 			this.controller.setVisible(false);
 		}else if(dataSource.equals("serial")){
-			this.dr = new SerialDataReceiver(dataSet, "/dev/ttyUSB0");
+			String portName = Settings.getString(Settings.SERIAL_PORT);
+			this.activeDataReceiver = new SerialDataReceiver(dataSet, portName);
 			this.controller.setVisible(false);
 		}else if(dataSource.equals("logfile")){
-			this.dr = this.lfr;
-			//lfr.setController(this.controller);
-			//this.controller.setReader(lfr);
+			this.activeDataReceiver = this.logFileReader;
 			this.controller.refresh();
 			this.controller.setVisible(true);
 		}

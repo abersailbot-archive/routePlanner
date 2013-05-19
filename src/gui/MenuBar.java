@@ -29,13 +29,15 @@ public class MenuBar extends JMenuBar implements ActionListener{
 		JMenu dataSourceMenu = new JMenu("Data source");
 		
 		ButtonGroup radio = new ButtonGroup();
+		JRadioButtonMenuItem none = new JRadioButtonMenuItem("None");
 		JRadioButtonMenuItem mock = new JRadioButtonMenuItem("Mock");
 		JRadioButtonMenuItem serial = new JRadioButtonMenuItem("Serial");
-		serial.setSelected(true);
 		JRadioButtonMenuItem log = new JRadioButtonMenuItem("Log file");
+		radio.add(none);
 		radio.add(mock);
 		radio.add(serial);
 		radio.add(log);
+		dataSourceMenu.add(none);
 		dataSourceMenu.add(mock);
 		dataSourceMenu.add(serial);
 		dataSourceMenu.add(log);

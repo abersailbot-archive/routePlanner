@@ -26,6 +26,7 @@ public class Settings{
 	public static final String MAP_MAX_ZOOM = "mapMaxZoomLevel";
 	public static final String MAP_MIN_ZOOM = "mapMinZoomLevel";
 	public static final String FOLLOW_ROBOT = "followRobot";
+	public static final String SERIAL_PORT = "serialPortName";
 	
 	private static final String SETTINGS_FILE_NAME = "settings.txt";
 	private static Properties props = new Properties();	
@@ -102,6 +103,7 @@ public class Settings{
 		set(MAP_LAT, "52.41156"); //Aberystwyth
 		set(MAP_LON, "-4.08975");
 		set(FOLLOW_ROBOT, "false");
+		set(SERIAL_PORT, "/dev/ttyUSB0"); //default for linux
 	}
 	
 }
