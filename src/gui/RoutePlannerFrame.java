@@ -113,9 +113,6 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 		this.getContentPane().add(map, BorderLayout.CENTER);
 		
 		map.addMouseListener(this.wpPanel);
-		map.addKeyListener(wpPanel);
-		this.addKeyListener(wpPanel);
-		sidePanel.addKeyListener(wpPanel);
 		this.setVisible(true);
 		this.addWindowListener(this);
 		

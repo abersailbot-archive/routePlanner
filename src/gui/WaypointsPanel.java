@@ -4,6 +4,9 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -12,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -27,7 +31,7 @@ import data.Waypoints;
  * @author Kamil Mrowiec <kam20@aber.ac.uk>
  * @version 1.0 (6 May 2013)
  */
-public class WaypointsPanel extends JPanel implements MouseListener, KeyListener, ActionListener{
+public class WaypointsPanel extends JPanel implements MouseListener, ActionListener{
 	
 	private class WaypointListModel implements ListModel{
 
@@ -61,6 +65,7 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 	
 	JList wpList = new JList();
 	JButton load, save;
+	JPanel buttonsPanel;
 	Waypoints waypoints;
 	boolean editable = false;
 
@@ -74,15 +79,34 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 		wpList = new JList(new WaypointListModel());
 		this.add(wpList, BorderLayout.CENTER);
 		
-		save = new JButton("Save to file");
-		load = new JButton("Load from file");
+		save = new JButton(new ImageIcon("png/Save.png"));
+		load = new JButton(new ImageIcon("png/Open.png"));
 		
 		save.addActionListener(this);
 		load.addActionListener(this);
 		
-		this.add(save, BorderLayout.SOUTH);
-		this.add(load, BorderLayout.NORTH);
+		buttonsPanel = new JPanel(new FlowLayout());
+		buttonsPanel.add(load);
+		buttonsPanel.add(save);
 		
+		this.add(buttonsPanel, BorderLayout.NORTH);
+		
+		KeyboardFocusManager.getCurrentKeyboardFocusManager()
+		  .addKeyEventDispatcher(new KeyEventDispatcher() {
+		      @Override
+		      public boolean dispatchKeyEvent(KeyEvent e) {
+		    	  if(e.getID()==KeyEvent.KEY_PRESSED){
+		    		  if(e.getKeyCode()==KeyEvent.VK_CONTROL){
+		    			  editable = true;
+		    		  }
+		    	  }else if(e.getID()==KeyEvent.KEY_RELEASED){
+		    		  if(e.getKeyCode()==KeyEvent.VK_CONTROL){
+		    			  editable = false;
+		    		  }
+		    	  }
+		        return false;
+		      }
+		});
 		
 	}
 	
@@ -129,10 +153,9 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 
 	@Override
 	public void mouseReleased(MouseEvent arg0){
-		if(!this.isVisible()) return;
+		//if(!this.isVisible()) return;
 			
-		if(arg0.getButton()==MouseEvent.BUTTON1){
-			System.out.println("Key event");
+		if(arg0.getButton()==MouseEvent.BUTTON1 && this.editable){
 			System.out.println(arg0.getPoint());
 			RoutePlannerFrame frame = RoutePlannerFrame.getInstance();
 			Coordinate pos = frame.getMap().getPosition(arg0.getPoint());
@@ -140,32 +163,6 @@ public class WaypointsPanel extends JPanel implements MouseListener, KeyListener
 			this.waypoints.add(pos);
 			this.refresh();
 		}
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0){
-		System.out.println("KEY");
-		if(arg0.getKeyCode()==KeyEvent.VK_CONTROL){
-			this.editable = true;
-			System.out.println("CTRL PRESSED");
-		}
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0){
-		System.out.println("KEY");
-		if(arg0.getKeyCode()==KeyEvent.VK_CONTROL){
-			this.editable = false;
-			System.out.println("CTRL released");
-		}
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0){
-		// TODO Auto-generated method stub
 		
 	}
 
