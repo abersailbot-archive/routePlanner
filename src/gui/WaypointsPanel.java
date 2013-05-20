@@ -17,6 +17,7 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListModel;
@@ -64,7 +65,7 @@ public class WaypointsPanel extends JPanel implements MouseListener, ActionListe
 	}
 	
 	JList wpList = new JList();
-	JButton load, save;
+	JButton load, save, clear;
 	JPanel buttonsPanel;
 	Waypoints waypoints;
 	boolean editable = false;
@@ -81,13 +82,20 @@ public class WaypointsPanel extends JPanel implements MouseListener, ActionListe
 		
 		save = new JButton(new ImageIcon("png/Save.png"));
 		load = new JButton(new ImageIcon("png/Open.png"));
+		clear = new JButton(new ImageIcon("png/Clear.png"));
+		
+		save.setToolTipText("Save waypoints to file");
+		load.setToolTipText("Load waypoints from file");
+		clear.setToolTipText("Remove all waypoints");
 		
 		save.addActionListener(this);
 		load.addActionListener(this);
+		clear.addActionListener(this);
 		
 		buttonsPanel = new JPanel(new FlowLayout());
 		buttonsPanel.add(load);
 		buttonsPanel.add(save);
+		buttonsPanel.add(clear);
 		
 		this.add(buttonsPanel, BorderLayout.NORTH);
 		
@@ -153,25 +161,36 @@ public class WaypointsPanel extends JPanel implements MouseListener, ActionListe
 
 	@Override
 	public void mouseReleased(MouseEvent arg0){
-		//if(!this.isVisible()) return;
-			
 		if(arg0.getButton()==MouseEvent.BUTTON1 && this.editable){
-			System.out.println(arg0.getPoint());
+			//System.out.println(arg0.getPoint());
 			RoutePlannerFrame frame = RoutePlannerFrame.getInstance();
 			Coordinate pos = frame.getMap().getPosition(arg0.getPoint());
-			System.out.println(pos);
+			//System.out.println(pos);
 			this.waypoints.add(pos);
 			this.refresh();
 		}
-		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0){
 		if(arg0.getSource()==this.save){
-			this.waypoints.saveToFile();
+			JFileChooser fc = new JFileChooser(".");
+			fc.setApproveButtonText("Save");
+			fc.setDialogTitle("Save waypoints");
+			fc.showOpenDialog(this);
+			File f = fc.getSelectedFile();
+			if(f==null) return;
+			this.waypoints.saveToFile(f);
 		}else if(arg0.getSource()==this.load){
-			this.waypoints.readFromFile(new File("waypoints.txt"));
+			JFileChooser fc = new JFileChooser(".");
+			fc.setDialogTitle("Open waypoints file");
+			fc.showOpenDialog(this);
+			File f = fc.getSelectedFile();
+			if(f==null) return;
+			this.waypoints.readFromFile(f);
+			this.refresh();
+		}else if(arg0.getSource()==this.clear){
+			this.waypoints.clearList();
 			this.refresh();
 		}
 		

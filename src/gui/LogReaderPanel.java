@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -52,7 +53,9 @@ public class LogReaderPanel extends JPanel implements ChangeListener, ActionList
 		top.add(playPause);
 		
 		bottom = new JPanel(new BorderLayout());
-		openFileButton = new JButton("OPEN");
+		openFileButton = new JButton(new ImageIcon("png/Open.png"));
+		openFileButton.setToolTipText("Open log file");
+		openFileButton.setActionCommand("open");
 		openFileButton.addActionListener(this);
 		fileName = new JLabel("File not loaded");
 		bottom.add(fileName, BorderLayout.CENTER);
@@ -84,10 +87,12 @@ public class LogReaderPanel extends JPanel implements ChangeListener, ActionList
 	@Override
 	public void actionPerformed(ActionEvent arg0){
 		String message = arg0.getActionCommand();
-		if(message.equals("OPEN")){
+		if(message.equals("open")){
 			JFileChooser fc = new JFileChooser(".");
+			fc.setDialogTitle("Open log file");
 			fc.showOpenDialog(this);
 			File f = fc.getSelectedFile();
+			if(f==null) return;
 			try{
 				this.reader.openFile(f);
 			}catch(Exception ex){

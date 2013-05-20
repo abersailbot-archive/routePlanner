@@ -22,7 +22,7 @@ public class Waypoints{
 	LinkedList<Coordinate> points;
 	
 	public Waypoints(){
-		points = new LinkedList<Coordinate>();
+		this.points = new LinkedList<Coordinate>();
 	}
 
 	public void add(Coordinate waypoint){
@@ -35,6 +35,10 @@ public class Waypoints{
 
 	public void setPoints(LinkedList<Coordinate> points){
 		this.points = points;
+	}
+	
+	public void clearList(){
+		this.points.clear();
 	}
 	
 	public String getStringRepresentation(int wpNumber){
@@ -60,9 +64,8 @@ public class Waypoints{
 	}
 	
 	
-	public void saveToFile(){
+	public void saveToFile(File file){
 		try{
-			File file = new File("waypoints.txt");
 			file.createNewFile();
 			BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
