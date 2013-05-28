@@ -2,9 +2,12 @@ package org.openstreetmap.gui.jmapviewer;
 
 //License: GPL. Copyright 2008 by Jan Peter Stotz
 
+import gui.BoatIndicators;
+
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -595,6 +598,12 @@ public class JMapViewer extends JPanel implements TileLoaderListener {
         }
 
         attribution.paintAttribution(g, getWidth(), getHeight(), getPosition(0, 0), getPosition(getWidth(), getHeight()), zoom, this);
+    
+        //Drawing detailed boat indicator
+        Graphics2D g2d = (Graphics2D) g.create(0, this.getHeight()-BoatIndicators.SIZE, 
+        		BoatIndicators.SIZE, BoatIndicators.SIZE);
+        BoatIndicators.draw(g2d);
+    
     }
 
     /**
