@@ -7,6 +7,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 
@@ -22,9 +28,17 @@ public class MapBoatIndicator implements MapMarker{
 	int heading;
 	int wind;
 	
+//	BufferedImage arrow;
+	
 	public MapBoatIndicator(double lat, double lon){
 		this.lat = lat;
 		this.lon = lon;
+//		try{
+//			arrow = ImageIO.read(new File("png/arrow.png"));
+//		}catch(IOException ex){
+//			ex.printStackTrace();
+//			System.exit(0);
+//		}
 	}
 	
 	@Override
@@ -55,24 +69,36 @@ public class MapBoatIndicator implements MapMarker{
         g.drawOval(position.x - size_h, position.y - size_h, size, size);
         
         drawArrow((Graphics2D) g, position.x, position.y, position.x+diffX, position.y-diffY);
-        
+        /*
         int n = 100;
         if(wind<=90) drawWindArrow(g, new Point(position.x-n, position.y+n));
         else if(wind<=180) drawWindArrow(g, new Point(position.x-n, position.y-n));
         else if(wind<=270) drawWindArrow(g, new Point(position.x+n, position.y-n));
         else drawWindArrow(g, new Point(position.x+n, position.y+n));
-		
+		*/
 	}
-	
+	/*
 	public void drawWindArrow(Graphics g, Point position){
-		double c = 50; //length of heading arrow
-		double b = c*Math.sin(Math.toRadians(wind));
-        double a = c*Math.cos(Math.toRadians(wind));
-        int diffX = (int) Math.round(b);
-        int diffY = (int) Math.round(a);    
-        g.drawLine(position.x, position.y, position.x+diffX, position.y-diffY);
-        drawArrow((Graphics2D) g, position.x, position.y, position.x+diffX, position.y-diffY);
+		
+		Graphics2D g2d = (Graphics2D) g;
+		//Graphics2D part = (Graphics2D) g2d.create(position.x, position.y, 300, 300);
+		Graphics2D part = (Graphics2D) g2d.create(0, 0, 300, 300);
+		//AffineTransform t = g2d.getTransform();
+		//t.rotate(0.3);
+		//g2d.setTransform(t);
+		part.rotate(Math.toRadians(wind), 40, 40);
+		part.drawImage(arrow, 0, 0, null);
+		//g2d.setTransform(t);
+		
+//		double c = 50; //length of heading arrow
+//		double b = c*Math.sin(Math.toRadians(wind));
+//        double a = c*Math.cos(Math.toRadians(wind));
+//        int diffX = (int) Math.round(b);
+//        int diffY = (int) Math.round(a);    
+//        g.drawLine(position.x, position.y, position.x+diffX, position.y-diffY);
+//        drawArrow((Graphics2D) g, position.x, position.y, position.x+diffX, position.y-diffY);
 	}
+	*/
 	
 	
 	/**

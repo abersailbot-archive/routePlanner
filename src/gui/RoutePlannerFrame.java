@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -116,6 +117,12 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 		this.setVisible(true);
 		this.addWindowListener(this);
 		
+		try{
+			BoatIndicators.loadImages();
+		}catch(IOException ex){
+			ex.printStackTrace();
+		}
+		
 		}
 	
 	public void run(){
@@ -162,6 +169,8 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 	
 	private void updateBoatPosition(){
 		try{
+			BoatIndicators.update( dataSet.getValueByKey("wind"), 
+					dataSet.getValueByKey("bhead"), dataSet.getValueByKey("whead"), 120);
 			boatMarker.update();
 			if(followBoat) map.setDisplayPositionByLatLon(
 					boatMarker.getLat(), boatMarker.getLon(), map.getZoom());
