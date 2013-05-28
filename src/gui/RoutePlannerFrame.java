@@ -169,7 +169,8 @@ public class RoutePlannerFrame extends JFrame implements WindowListener {
 	
 	private void updateBoatPosition(){
 		try{
-			BoatIndicators.update( dataSet.getValueByKey("wind"), dataSet.getValueByKey("bhead"), dataSet.getValueByKey("whead"), 2);
+			BoatIndicators.update( dataSet.getValueByKey("wind"), 
+					dataSet.getValueByKey("bhead"), dataSet.getValueByKey("whead"), 120);
 			boatMarker.update();
 			if(followBoat) map.setDisplayPositionByLatLon(
 					boatMarker.getLat(), boatMarker.getLon(), map.getZoom());

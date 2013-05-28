@@ -14,7 +14,7 @@ public class BoatIndicators{
 	private static int wind;
 	private static int heading;
 	private static int wpHeading;
-	private static int rudder;
+	private static int rudder = 180;
 	
 	public static final int SIZE = 300;
 	
@@ -43,9 +43,9 @@ public class BoatIndicators{
 		Graphics2D boatGraphics = (Graphics2D) g.create();
 		boatGraphics.rotate(Math.toRadians(heading), SIZE/2, SIZE/2);
 
-		Graphics2D rudderGraphics = (Graphics2D) boatGraphics.create(125, 250, 50, 50);
+		Graphics2D rudderGraphics = (Graphics2D) boatGraphics.create(135, 215, 50, 50);
 		
-		rudderGraphics.rotate(Math.toRadians(20), 25, 25);
+		rudderGraphics.rotate(Math.toRadians(rudder - 180), 15, 3);
 		rudderGraphics.drawImage(rudderInd, 0, 0, null);
 		
 		

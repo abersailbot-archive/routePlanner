@@ -28,17 +28,17 @@ public class MapBoatIndicator implements MapMarker{
 	int heading;
 	int wind;
 	
-	BufferedImage arrow;
+//	BufferedImage arrow;
 	
 	public MapBoatIndicator(double lat, double lon){
 		this.lat = lat;
 		this.lon = lon;
-		try{
-			arrow = ImageIO.read(new File("png/arrow.png"));
-		}catch(IOException ex){
-			ex.printStackTrace();
-			System.exit(0);
-		}
+//		try{
+//			arrow = ImageIO.read(new File("png/arrow.png"));
+//		}catch(IOException ex){
+//			ex.printStackTrace();
+//			System.exit(0);
+//		}
 	}
 	
 	@Override
@@ -69,15 +69,15 @@ public class MapBoatIndicator implements MapMarker{
         g.drawOval(position.x - size_h, position.y - size_h, size, size);
         
         drawArrow((Graphics2D) g, position.x, position.y, position.x+diffX, position.y-diffY);
-        
+        /*
         int n = 100;
         if(wind<=90) drawWindArrow(g, new Point(position.x-n, position.y+n));
         else if(wind<=180) drawWindArrow(g, new Point(position.x-n, position.y-n));
         else if(wind<=270) drawWindArrow(g, new Point(position.x+n, position.y-n));
         else drawWindArrow(g, new Point(position.x+n, position.y+n));
-		
+		*/
 	}
-	
+	/*
 	public void drawWindArrow(Graphics g, Point position){
 		
 		Graphics2D g2d = (Graphics2D) g;
@@ -98,6 +98,7 @@ public class MapBoatIndicator implements MapMarker{
 //        g.drawLine(position.x, position.y, position.x+diffX, position.y-diffY);
 //        drawArrow((Graphics2D) g, position.x, position.y, position.x+diffX, position.y-diffY);
 	}
+	*/
 	
 	
 	/**
