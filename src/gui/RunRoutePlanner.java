@@ -10,10 +10,12 @@ public class RunRoutePlanner {
 		
 		set.addDataCell("lat", "Lattitude")
 		.addDataCell("lon", "Longitiude")
-		.addDataCell("spd", "Speed")
+		.addDataCell("speed", "Speed")
 		.addDataCell("bhead", "Boat heading")
 		.addDataCell("thead", "Target heading")
+		.addDataCell("tdist", "Target distance")
 		.addDataCell("whead", "Waypoint heading")
+		.addDataCell("distance", "Waypoint distance")
 		.addDataCell("wind", "Wind direction")
 		.addDataCell("spos", "Sail position")
 		.addDataCell("rpos", "Rudder position")
